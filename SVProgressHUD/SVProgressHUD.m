@@ -46,6 +46,7 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
 @property (nonatomic, readwrite) NSUInteger activityCount;
 
 @property (nonatomic, readonly) CGFloat visibleKeyboardHeight;
+@property (nonatomic, strong) UIView *customAnimationView;
 
 - (void)updateHUDFrame;
 - (void)updateMask;
@@ -185,6 +186,10 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
 
 + (void)setFadeOutAnimationDuration:(NSTimeInterval)duration {
     [self sharedView].fadeOutAnimationDuration = duration;
+}
+
++ (void)setCustomAnimationView:(UIView *)view {
+    [self sharedView].customAnimationView = view;
 }
 
 
@@ -1106,7 +1111,12 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
 
 - (UIView*)indefiniteAnimatedView {
     // Get the correct spinner for defaultAnimationType
-    if(self.defaultAnimationType == SVProgressHUDAnimationTypeFlat){
+    if(self.defaultAnimationType == SVProgressHUDAnimationTypeCustom && self.customAnimationView != nil) {
+        if (_indefiniteAnimatedView != self.customAnimationView) {
+            [_indefiniteAnimatedView removeFromSuperview];
+        }
+        _indefiniteAnimatedView = self.customAnimationView;
+    } else if(self.defaultAnimationType == SVProgressHUDAnimationTypeFlat){
         // Check if spinner exists and is an object of different class
         if(_indefiniteAnimatedView && ![_indefiniteAnimatedView isKindOfClass:[SVIndefiniteAnimatedView class]]){
             [_indefiniteAnimatedView removeFromSuperview];
