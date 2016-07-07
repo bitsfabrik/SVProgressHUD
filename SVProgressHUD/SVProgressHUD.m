@@ -47,6 +47,7 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
 
 @property (nonatomic, readonly) CGFloat visibleKeyboardHeight;
 @property (nonatomic, strong) UIView *customAnimationView;
+@property (nonatomic, strong) UIColor *borderColor;
 
 - (void)updateHUDFrame;
 - (void)updateMask;
@@ -190,6 +191,10 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
 
 + (void)setCustomAnimationView:(UIView *)view {
     [self sharedView].customAnimationView = view;
+}
+
++ (void)setBorderColor:(UIColor *)borderColor {
+    [self sharedView].borderColor = borderColor;
 }
 
 
@@ -1237,6 +1242,13 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
     }
 }
 
+- (UIColor*)borderColorForStyle {
+    if(self.defaultStyle == SVProgressHUDStyleCustom && self.backgroundColor != [UIColor clearColor] && self.borderColor != nil) {
+        return self.borderColor;
+    }
+    return [UIColor clearColor];
+}
+
 - (UIImage*)image:(UIImage*)image withTintColor:(UIColor*)color {
     CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, image.scale);
@@ -1279,6 +1291,8 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
     
     // Update styling
     _hudView.layer.cornerRadius = self.cornerRadius;
+    _hudView.layer.borderColor = self.borderColorForStyle.CGColor;
+    _hudView.layer.borderWidth = 1.f;
     _hudView.backgroundColor = self.backgroundColorForStyle;
     
     return _hudView;

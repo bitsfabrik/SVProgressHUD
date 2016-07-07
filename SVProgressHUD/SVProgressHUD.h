@@ -93,6 +93,7 @@ typedef void (^SVProgressHUDDismissCompletion)(void);
 + (void)setFadeInAnimationDuration:(NSTimeInterval)duration;        // default is 0.15 seconds
 + (void)setFadeOutAnimationDuration:(NSTimeInterval)duration;       // default is 0.15 seconds
 + (void)setCustomAnimationView:(UIView*)animationView;              // default is nil. will be used when animation type is set to SVProgressHUDAnimationTypeCustom
++ (void)setBorderColor:(UIColor *)borderColor;                      // default is nil, only used for SVProgrressHUDStyleCustom
 
 #pragma mark - Show Methods
 
